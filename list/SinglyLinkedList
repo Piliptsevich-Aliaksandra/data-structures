@@ -68,7 +68,7 @@ public class SinglyLinkedList {
         }
 
         if (index == 0) {
-            addLast(element);
+            addFirst(element);
         } else if (index == size) {
             addLast(element);
         } else {
