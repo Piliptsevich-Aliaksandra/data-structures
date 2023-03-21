@@ -1,0 +1,114 @@
+import java.util.Arrays;
+
+public class ArrayQueue {
+    private int head;
+    private int tail;
+    private Object[] queue;
+
+    public ArrayQueue() {
+        this.head = 0;
+        this.tail = 0;
+        this.queue = new Object[16];
+    }
+
+    public ArrayQueue(int capacity) {
+        assert capacity > 0;
+        this.head = 0;
+        this.tail = 0;
+        this.queue = new Object[capacity];
+    }
+
+    public boolean empty() {
+        return size() == 0;
+    }
+
+    public void push(Object element) {
+            ensureCapacity(size() + 1);
+            queue[tail] = element;
+            tail = (tail + 1) % queue.length;
+    }
+
+    public void pushFirst(Object element) {
+        ensureCapacity(size() + 1);
+        head = head == 0 ? queue.length - 1 : head - 1;
+        queue[head] = element;
+    }
+
+    public Object pop() {
+        if (size() > 0) {
+            ensureCapacity(size() - 1);
+            Object element = queue[head];
+            queue[head] = null;
+            head = (head + 1) % queue.length;
+            return element;
+        } else {
+            return null;
+        }
+    }
+
+    public Object popLast() {
+        if (size() > 0) {
+            ensureCapacity(size() - 1);
+            tail = tail == 0 ? queue.length - 1 : tail - 1;
+            Object element = queue[tail];
+            queue[tail] = null;
+            return element;
+        } else {
+            return null;
+        }
+    }
+
+    public Object peekFirst() {
+        if (size() > 0) {
+            return queue[head];
+        } else {
+            return null;
+        }
+    }
+
+    public Object peekLast() {
+        if (size() > 0) {
+            return queue[tail == 0 ? queue.length - 1 : tail - 1];
+        } else {
+            return null;
+        }
+    }
+
+    public int size() {
+        if (head > tail) {
+            return queue.length + tail - head;
+        } else {
+            return tail - head;
+        }
+    }
+
+    public void clear() {
+        while (!empty()) {
+            pop();
+        }
+    }
+
+    public Object[] toArray() {
+        Object[] array = new Object[size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = queue[(head + i) % queue.length];
+        }
+        return array;
+    }
+
+    private void ensureCapacity(int size) {
+        if (size > queue.length || (size >= 4 && size == queue.length / 4)) {
+            Object[] newQueue;
+            int capacity;
+            if (size == queue.length) {
+                capacity = queue.length * 2;
+            } else {
+                capacity = queue.length / 2;
+            }
+            newQueue = Arrays.copyOf(toArray(), capacity);
+            tail = size();
+            head = 0;
+            queue = newQueue;
+        }
+    }
+}
