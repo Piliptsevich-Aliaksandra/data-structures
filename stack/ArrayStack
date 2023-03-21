@@ -1,0 +1,72 @@
+import java.util.Arrays;
+
+public class ArrayStack {
+    private int top;
+    private Object[] stack;
+
+    public ArrayStack() {
+        this.top = 0;
+        this.stack = new Object[16];
+    }
+
+    public ArrayStack(int capacity) {
+        assert capacity > 0;
+        this.top = 0;
+        this.stack = new Object[capacity];
+    }
+
+    public boolean empty() {
+        return size() == 0;
+    }
+
+    public void push(Object element) {
+            ensureCapacity(size() + 1);
+            stack[top++] = element;
+    }
+
+    public Object pop() {
+        if (size() > 0) {
+            ensureCapacity(size() - 1);
+            Object element = stack[--top];
+            stack[top] = null;
+            return element;
+        } else {
+            return null;
+        }
+    }
+
+    public Object peek() {
+        if (size() > 0) {
+            return stack[top - 1];
+        } else {
+            return null;
+        }
+    }
+
+    public int size() {
+        return top;
+    }
+
+    public void clear() {
+        while (!empty()) {
+            pop();
+        }
+    }
+
+    public Object[] toArray() {
+        Object[] array = Arrays.copyOf(stack, size());
+        return array;
+    }
+
+    private void ensureCapacity(int size) {
+        if (size > stack.length || (size >= 4 && size == stack.length / 4)) {
+            int capacity;
+            if (size == stack.length) {
+                capacity = stack.length * 2;
+            } else {
+                capacity = stack.length / 2;
+            }
+            stack = Arrays.copyOf(stack, capacity);
+        }
+    }
+}
