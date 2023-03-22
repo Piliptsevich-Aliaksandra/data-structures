@@ -80,6 +80,7 @@ public class SinglyLinkedList {
             Node el = new Node(element);
             before.setNext(el);
             el.setNext(after);
+            size++;
         }
     }
 
